@@ -1,0 +1,118 @@
+# ORB_SLAM3_ROS2 (Monocular test with webcam)
+This repository is ROS2 wrapping to use ORB_SLAM3. In additon, Monocular SLAM test using laptop webcam
+
+## Prerequisites
+- I have tested on below version.
+  - Ubuntu 22.04
+  - ROS2 Humble
+  - OpenCV 4.2.0
+
+- Build ORB_SLAM3
+  - Go to this [repo](https://github.com/zang09/ORB-SLAM3-STEREO-FIXED) and follow build instruction.
+
+- Install related ROS2 package
+```
+$ sudo apt install ros-humble-vision-opencv && sudo apt install ros-humble-message-filters
+```
+
+## How to build
+1. Clone repository to your ROS workspace
+```
+$ mkdir -p ros2_ws/src
+$ cd ~/ros2_ws/src
+$ git clone https://gitlab.com/akbedaka/orb_slam3_ros2.git orbslam3_ros2
+```
+
+Now, you are ready to build!
+```
+$ cd ~/ros2_ws
+$ colcon build
+```
+
+2. Please compile with `OpenCV 4.2.0` version. (if needed)
+Refer this [#issue](https://github.com/zang09/ORB_SLAM3_ROS2/issues/2#issuecomment-1251850857)
+
+## How to use
+1. Source the workspace  
+```
+$ source ~/ros2_ws/install/local_setup.bash
+```
+
+2. Run orbslam mode, which you want.  
+This repository only support `MONO, STEREO, RGBD, STEREO-INERTIAL` mode now.  
+You can find vocabulary file and config file in here. (e.g. `orbslam3_ros2/vocabulary/ORBvoc.txt`, `orbslam3_ros2/config/monocular/TUM1.yaml` for monocular SLAM).
+  - `MONO` mode  
+```
+$ ros2 run orbslam3 mono PATH_TO_VOCABULARY PATH_TO_YAML_CONFIG_FILE
+```
+  - `STEREO` mode  
+```
+$ ros2 run orbslam3 stereo PATH_TO_VOCABULARY PATH_TO_YAML_CONFIG_FILE BOOL_RECTIFY
+```
+  - `RGBD` mode  
+```
+$ ros2 run orbslam3 rgbd PATH_TO_VOCABULARY PATH_TO_YAML_CONFIG_FILE
+```
+  - `STEREO-INERTIAL` mode  
+```
+$ ros2 run orbslam3 stereo-inertial PATH_TO_VOCABULARY PATH_TO_YAML_CONFIG_FILE BOOL_RECTIFY [BOOL_EQUALIZE]
+```
+
+## Run With Rosbag
+To play ros1 bag file, you should install `ros1 noetic` & `ros1 bridge`.  
+Here is a [link](https://www.theconstructsim.com/ros2-qa-217-how-to-mix-ros1-and-ros2-packages/) to demonstrate example of `ros1-ros2 bridge` procedure.  
+If you have `ros1 noetic` and `ros1 bridge` already, open your terminal and follow this:  
+(Shell A, B, C, D is all different terminal, e.g. `stereo-inertial` mode)
+
+1. Download EuRoC Dataset (`V1_02_medium.bag`)
+```
+$ wget -P ~/Downloads http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_02_medium/V1_02_medium.bag
+```  
+
+2. Launch Terminal  
+(e.g. `ROS1_INSTALL_PATH`=`/opt/ros/humble`, `ROS2_INSTALL_PATH`=`/opt/ros/foxy`)
+```
+#Shell A:
+source ${ROS1_INSTALL_PATH}/setup.bash
+roscore
+
+#Shell B:
+source ${ROS1_INSTALL_PATH}/setup.bash
+source ${ROS2_INSTALL_PATH}/setup.bash
+export ROS_MASTER_URI=http://localhost:11311
+ros2 run ros1_bridge dynamic_bridge
+
+#Shell C:
+source ${ROS1_INSTALL_PATH}/setup.bash
+rosbag play ~/Downloads/V1_02_medium.bag --pause /cam0/image_raw:=/camera/left /cam1/image_raw:=/camera/right /imu0:=/imu
+
+#Shell D:
+source ${ROS2_INSTALL_PATH}/setup.bash
+ros2 run orbslam3 stereo-inertial PATH_TO_VOCABULARY PATH_TO_YAML_CONFIG_FILE BOOL_RECTIFY [BOOL_EQUALIZE]
+```
+
+3. Press `spacebar` in `Shell C` to resume bag file.  
+
+## ORB_SLAM3_MONO Monocular SLAM Test
+
+1. Install basic camera drivers
+```
+sudo apt-get install ros-humble-image-transport ros-humble-camera-info-manager
+sudo apt install ros-humble-image-tools
+```
+
+2. Enable a webcam. 
+```
+ros2 run image_tools cam2image --ros-args -p video_device:=/dev/video0
+```
+
+3.We run (Before extarct the file "colcon_ws/src/orbslam3_ros/vocabulary/ORBvoc.txt.tar.gz")
+```
+cd ros2_ws
+source ./install/setup.bash
+ros2 run orbslam3 mono ./src/orbslam3_ros2/vocabulary/ORBvoc.txt ./src/orbslam3_ros2/config/monocular/TUM1.yaml
+```
+
+## Acknowledgments
+This repository is modified from [this](https://github.com/curryc/ros2_orbslam3) repository.  
+To add `stereo-inertial` mode and improve build difficulites.
