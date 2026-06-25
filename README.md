@@ -1,4 +1,4 @@
-# ORB-SLAM3 ROS 2 Humble Wrapper (Monocular Webcam Setup)
+# ORB-SLAM3 ROS 2 Humble Wrapper (Monocular Setup)
 
 This repository contains a fully working ROS 2 Humble wrapper for ORB-SLAM3, specifically optimized and calibrated to run locally on a standard laptop webcam using a Monocular Visual SLAM pipeline.
 
