@@ -4,7 +4,7 @@ This repository contains a fully working ROS 2 Humble wrapper for ORB-SLAM3, spe
 
 ---
 
-## 🚀 Features
+## Features
 
 * **ROS 2 Humble Integration** – Uses `colcon` for building and native ROS 2 nodes for execution.
 * **Dual Camera Profiles** – Includes ready-to-use profiles for a standard `laptop_webcam.yaml` (PinHole) and an ultra-wide `sj4000.yaml` (KannalaBrandt8/Fisheye).
@@ -13,7 +13,7 @@ This repository contains a fully working ROS 2 Humble wrapper for ORB-SLAM3, spe
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 This setup was built and tested using an **Ubuntu 22.04 container via Distrobox** running on an **EndeavourOS/Arch Linux host**.
 
@@ -32,7 +32,7 @@ sudo apt install ros-humble-image-tools ros-humble-camera-calibration -y
 
 ---
 
-## 🛠️ Installation & Build Instructions
+## Installation & Build Instructions
 
 ### 1. Clone the Repository
 
@@ -68,7 +68,7 @@ colcon build \
 
 ---
 
-## 🎮 Usage Guide
+## Usage Guide
 
 Running the SLAM system requires two terminal windows.
 
@@ -138,7 +138,7 @@ ros2 run orbslam3 mono \
 
 ---
 
-## ⚙️ Custom Camera Calibration
+## Custom Camera Calibration
 
 If you are using a different camera, you should recalibrate it using a checkerboard target.
 
@@ -182,7 +182,7 @@ After calibration:
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
 orb_slam3_ros2_ws/
@@ -204,7 +204,7 @@ orb_slam3_ros2_ws/
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Error: Failed to open settings file at...
 
@@ -267,14 +267,14 @@ ORB-SLAM3 converts frames to grayscale internally, so tracking performance is un
 
 ---
 
-## 📜 Acknowledgements
+## Acknowledgements
 
 * Core SLAM engine by UZ-SLAMLab (ORB-SLAM3)
 * ROS 2 wrapper adapted from community implementations by zang09 and akbedaka
 
 ---
 
-## 📄 License
+## License
 
 Please refer to the original ORB-SLAM3 repository for licensing information and usage restrictions.
 
